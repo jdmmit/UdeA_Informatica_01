@@ -1,0 +1,36 @@
+"""Manejo de ciclos y condicionales
+Escribe una función en Python que toma como entrada una cadena de números positivos separados por guiones y determina si cada trío de números está en orden ascendente. La función también debe devolver la suma de todos los números en la cadena. Si algún trío de números no cumple con esta condición, la función debe devolver False y la suma de los valores debe ser 0. A continuación se muestran algunos ejemplos:
+
+Entrada: “059-359-789-456”
+Salida: Verdadero, Suma: 70
+Entrada: “149-694-569-459”
+Salida: Falso, Suma: 0
+Entrada: “789-569-479-560”
+Salida: Falso, Suma: 0
+Entrada: “458-589-159-489”
+Salida: Verdadero, Suma: 69
+Nota: Los tríos que se encuentran en rojo son los que no cumplen la condición.
+
+La cadena de cuerdas con números positivos separados por guiones debe ser
+ingresada por el usuario. Se supone que la cadena siempre contendrá 3 números
+entre cada guion y que habrá exactamente 4 tríos de números en la cadena (como
+se muestra en los ejemplos).
+"""
+
+def check_secuencia(secuencia_str):
+    trios = secuencia_str.split('-')
+    if len(trios) != 4 or not all(len(trio) == 3 and trio.isdigit() for trio in trios):
+        return False, 0
+
+    suma = 0
+    for trio in trios:
+        a, b, c = int(trio[0]), int(trio[1]), int(trio[2])
+        if a <= b <= c:
+            suma += a + b + c
+        else:
+            return False, 0
+    return True, suma
+
+secuencia_str = input("Ingrese la secuencia: ")
+salida, suma = check_secuencia(secuencia_str)
+print(f"Salida: {'Verdadero' if salida else 'Falso'}, Suma: {suma}")
