@@ -66,9 +66,11 @@ def dibujarAhorcado(intentos):
 def printIntro(fileName):
     """Imprime el contenido del archivo de bienvenida"""
     
-    with open(fileName, 'r') as archivo:
-        print(archivo.read())
-    
+    try:
+        with open(fileName, 'r') as archivo:
+            print(archivo.read())
+    except FileNotFoundError:
+        print("Archivo de introducción no encontrado.")
 
 def inputSecret():
     """Solicita y retorna la palabra secreta"""
@@ -78,10 +80,12 @@ def inputSecret():
     return pSec
 
 def loadWords(fileName):
-    """Carga las palabras desde un archivo"""
-    with open(fileName, 'r') as archivo:
-            palabras = archivo.read().strip()
-    return palabras
+    try:
+        with open(fileName, 'r') as archivo:
+            return archivo.read()
+    except FileNotFoundError:
+        print(f"Archivo {fileName} no encontrado.")
+        return ""
   # palabras por defecto
 
 def countWords(palabras, separador):
@@ -133,5 +137,4 @@ def palabraAdivinada(palabra, letrasIntentadas):
             return False
     return True
 
-        
-    
+
