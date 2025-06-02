@@ -1,0 +1,29 @@
+{
+  "variables": {
+    "temperatura": {
+      "minimo": -10,
+      "maximo": 50,
+      "unidades": "°C"
+    },
+    "humedad": {
+      "minimo": 0,
+      "maximo": 100,
+      "unidades": "%"
+    },
+    "presion": {
+      "minimo": 800,
+      "maximo": 1200,
+      "unidades": "hPa"
+    },
+    "viento": {
+      "minimo": 0,
+      "maximo": 200,
+      "unidades": "km/h"
+    },
+    "precipitacion": {
+      "minimo": 0,
+      "maximo": 500,
+      "unidades": "mm"
+    }
+  }
+}
