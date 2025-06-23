@@ -320,7 +320,7 @@ def ordenar_promedios_burbuja():
     graficar_promedios(indices_promedios)
 
 
-def contar_curso_estudiante(indice):
+def contar_cursos_estudiante(indice):
     
     """
     Cuenta cuántos cursos ha cursado un estudiante (notas >= 0)
@@ -338,3 +338,51 @@ def ordenar_cantidad_cursos_seleccion():
     """
     
     global estudiantes, notas_matriz
+    
+    if not estudiantes:
+        print(" No hay datos cargados. Use la opción 1 primero. ")
+        return
+
+    print(" Ordenando por cantidad de cursos usando algoritmo SELECCIÓN... ")
+    
+    # Crear lista de índices con cantidad de cursos
+    indices_cursos = []
+    for i in range(len(estudiantes)):
+        cantidad = contar_cursos_estudiante(i)
+        indices_cursos.append((i, cantidad))
+        
+    # ALGORITMO DE SELECCIÓN (requisito obligatorio del lab)
+    n = len(indices_cursos)
+    comparaciones = 0
+    intercambios = 0
+    
+    for i in range(n):
+        max_idx = i
+        for j in range(i + 1, n):
+            comparaciones += 1
+            if indices_cursos[j][1] > indices_cursos[max_idx][1]:
+                max_idx = j
+        if max_idx != i:
+            indices_cursos[i], indices_cursos[max_idx] = indices_cursos[max_idx], indices_cursos[i]
+            intercambios += 1
+            
+    # Mostrar resultados
+    print(f"\n Estudiantes ordenados por cantidad de cursos: \n ")
+    print("\n" + "-"*65 + "\n")
+    for pos, (i, cantidad) in enumerate(indices_cursos):
+        print(f"  {pos+1:2d}. {estudiantes[i]:12s} → {cantidad} cursos")
+
+    print(f"\n Estadísticas del algoritmo selección: \n ")
+    print(f"  Comparaciones: {comparaciones} ")
+    print(f"  Intercambios: {intercambios} ")
+
+    # GENERAR GRÁFICO
+    print("\n Generando gráfico de cantidad de cursos... \n ")
+    graficar_cantidad_cursos(indices_cursos)
+
+
+# ================= PARTE 2: REGRESIÓN LINEAL =================
+
+
+
+
