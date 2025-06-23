@@ -89,7 +89,7 @@ def main():
             elif opcion == "6":
                 predecir_estudiantes()
 
-            elif opcion == '0':
+            elif opcion == '7':
                 print("\n" + "="*65 + "\n")
                 print("¡Gracias por usar el Sistema de Estadísticas!")
                 print("Desarrollado para Informática I")
@@ -98,7 +98,7 @@ def main():
                 break    
             
             else:
-                print("Opción inválida. Por favor seleccione una opción del 0 al 6.")
+                print("Opción inválida. Por favor seleccione una opción del 1 al 7.")
 
         except KeyboardInterrupt:
             print("\n\n Programa interrumpido por el usuario. \n\n")
