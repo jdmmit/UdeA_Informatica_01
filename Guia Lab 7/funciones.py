@@ -56,29 +56,29 @@ def graficar_promedios(indices_promedios):
 
     global estudiantes
 
-    # Preparar datos para el grafico
-
+    # Preparar datos para el gráfico
     nombres = [estudiantes[i] for i, _ in indices_promedios]
     promedios = [promedio for _, promedio in indices_promedios]
 
-    # Crear el grafico
-    plt.figure(figsize = (14, 8))
+    # Crear el gráfico
+    plt.figure(figsize=(14, 8))
 
     # Crear barras con colores degradados
-    colores = plt.get_cmap("viridis")(np.linspace(0, 1, len(promedios)))
-    barras = plt.bar(range(len(nombres)), promedios, color=colores, alpha=0.8, edgecolor="black", linewidth=0.5)
+    colores = plt.get_cmap('viridis')(np.linspace(0, 1, len(promedios)))
+    barras = plt.bar(range(len(nombres)), promedios, color=colores, alpha=0.8, edgecolor='black', linewidth=0.5)
 
-    # Personalizar el grafico
-    plt.title("Promedio de Estudiantes (ordenamiento Burbuja)", fontsize=16, fontweight="bold", pad=20)
-    plt.xlabel("Estudiantes", fontsize=12, fontweight="bold")
-    plt.ylabel("Promedio de Notas", fontsize=12, fontweight="bold")
-    plt.xticks(range(len(nombres)), nombres, notacion=45, ha="rigth")
+    # Personalizar el gráfico
+    plt.title(' Promedios de Estudiantes (Ordenamiento Burbuja)', fontsize=16, fontweight='bold', pad=20)
+    plt.xlabel('Estudiantes', fontsize=12, fontweight='bold')
+    plt.ylabel('Promedio de Notas', fontsize=12, fontweight='bold')
+    plt.xticks(range(len(nombres)), nombres, rotation=45, ha='right')
 
     # Añadir valores encima de las barras
     for i, (barra, promedio) in enumerate(zip(barras, promedios)):
-        plt.text(barras.get_x() + barra.get_width()/2, barra.height() + 0.05, f"{promedio:.2f}", ha="center", va="botton", fontweight="bold", fontsize=10)
+        plt.text(barra.get_x() + barra.get_width()/2, barra.get_height() + 0.05, 
+                f'{promedio:.2f}', ha='center', va='bottom', fontweight='bold', fontsize=10)
 
-    # Añadir linea de promedio general
+    # Añadir línea de promedio general
     promedio_general = sum(promedios) / len(promedios)
     plt.axhline(y=promedio_general, color='red', linestyle='--', alpha=0.7, 
                 label=f'Promedio General: {promedio_general:.2f}')
@@ -109,7 +109,7 @@ def graficar_cantidad_cursos(indices_cursos):
     barras = plt.bar(range(len(nombres)), cantidades, color=colores, alpha=0.8, edgecolor='black', linewidth=0.5)
 
     # Personalizar el gráfico
-    plt.title('📚 Cantidad de Cursos por Estudiante (Ordenamiento Selección)', fontsize=16, fontweight='bold', pad=20)
+    plt.title('Cantidad de Cursos por Estudiante (Ordenamiento Selección)', fontsize=16, fontweight='bold', pad=20)
     plt.xlabel('Estudiantes', fontsize=12, fontweight='bold')
     plt.ylabel('Número de Cursos', fontsize=12, fontweight='bold')
     plt.xticks(range(len(nombres)), nombres, rotation=45, ha='right')
@@ -300,7 +300,7 @@ def ordenar_promedios_burbuja():
     for i in range(n):
         for j in range(0, n-i-1):
             comparaciones += 1
-            if indices_promedios[j][i] < indices_promedios[j + 1][i]: # Mayor a menor
+            if indices_promedios[j][1] < indices_promedios[j + 1][1]: # Mayor a menor
                 indices_promedios[j], indices_promedios[j + 1] = indices_promedios[j + 1], indices_promedios[j]
                 intercambios += 1
                 
@@ -384,5 +384,169 @@ def ordenar_cantidad_cursos_seleccion():
 # ================= PARTE 2: REGRESIÓN LINEAL =================
 
 
+def cargar_datos_historicos():
+    
+    """
+    Carga los datos históricos desde hist_matriculados.csv
+    """
+    
+    años = []
+    estudiantes_hist = []
+    
+    try:
+        with open("hist_matriculados.csv", "r") as archivo:
+            lineas = archivo.readlines()
+            
+        # Saltar encabezados y procesar datos
+        for i in range(1, len(lineas)):
+            linea = lineas[i].strip()
+            if "," in lineas and linea:
+                partes = linea.split(",")
+                if len(partes) >= 2:
+                    try:
+                        año = int(partes[0].strip())
+                        estudiantes = int(partes[1].strip())
+                        años.append(año)
+                        estudiantes_hist.append(estudiantes)
+                    except ValueError:
+                        continue
+                    
+        return años, estudiantes_hist
+    
+    except FileNotFoundError:
+        print(" Error: No se encontro el archivo 'hist_matriculados.csv'")
+        return [], []
+    except Exception as e:
+        print(f"Error al cargar datos historicos: {e}")
+        return [], []
+    
+    
+def calcular_regrecion_lineal(años, a, b):
+    
+    """
+    Calcula los valores de y para la regresión lineal y = ax + b
+    """
+    
+    return [a * año + b for año in años]
 
 
+def calcular_mae(valores_reales, valores_predichos):
+    
+    """
+    Calcula el Mean Absolute Error (MAE)
+    """
+    
+    if len(valores_reales) != len(valores_predichos):
+        return float("inf")
+    
+    errores = [abs(valores_reales[i] - valores_predichos[i]) for i in range(len(valores_reales))]
+    return sum(errores) / len(errores)
+
+
+def predecir_estudiantes():
+    
+    """
+    Función principal para predecir estudiantes matriculados
+    """
+    
+    print("\n" + "="*60 + "\n")
+    print(" PREDICCIÓN DE ESTUDIANTES MATRICULADOS ")
+    print("\n" + "="*60 + "\n")
+    
+    # Cargar datos históricos
+    años, estudiantes_hist = cargar_datos_historicos()
+    
+    if not años:
+        print(" No se pudieron cargar los datos historicos ")
+        return
+    
+    print(f" Datos históricos cargados: {len(años)} registros")
+    print(f" Período: {min(años)} - {max(años)}")
+    print(f" Rango de estudiantes: {min(estudiantes_hist)} - {max(estudiantes_hist)}")
+
+    # Buscar mejores parámetros por tanteo (como requiere el lab)
+    print(f" \n Buscando mejores parámetros por tanteo... \n")
+
+    mejor_a = 0
+    mejor_b = 0
+    mejor_mae = float('inf')
+    intentos = 0
+    
+    # Tanteo sistemático con rango amplio
+    valores_a = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
+    valores_b = [-5000, -4500, -4000, -3500, -3000, -2500, -2000, -1500, -1000, -500, 0]
+    
+    for a in valores_a:
+        for b in valores_b:
+            regresion = calcular_regrecion_lineal(años, a, b)
+            mae = calcular_mae(estudiantes_hist, regresion)
+            intentos += 1
+            
+            if mae < mejor_mae:
+                mejor_mae = mae
+                mejor_a = a
+                mejor_b = b
+                print(f" Nuevo mejor resultado: a={a}, b={b}, MAE={mae:.2f}")
+                
+    print(f" \n Resultado del tanteo: \n ")
+    print(f" Intentos realizados: {intentos} ")
+    print(f" Mejores parámetros: a = {mejor_a}, b = {mejor_b} ")
+    print(f" Error mínimo (MAE): {mejor_mae:.2f} estudiantes ")
+
+    # Solicitar año para predicción
+    while True:
+        try:
+            año_pred = input(f" Ingresa el año para predecir )ej: 2030: ").strip()
+            año_prediccion = int(año_pred)
+            
+            if año_prediccion <= max(años):
+                print(f" Advertencia: El año {año_prediccion} ya tiene datos historicos")
+                continuar = input("¿Desea continuar? (s/n): ").lower()
+                if continuar != "s":
+                    continue
+            break
+        
+        except ValueError:
+            print(" Por favor ingrese un año valido (numero entero) ")
+            continue
+        
+    # Hacer prediccion
+    estudiantes_predichos = mejor_a * año_prediccion + mejor_b
+    
+    print(f"\n" + "="*50 + "\n")
+    print(f" RESULTADO DE LA PREDICCIÓN ")
+    print(f"\n" + "="*50 + "\n")
+    print(f" Año solicitado: {año_prediccion} ")
+    print(f" Estudiantes estimados: {estudiantes_predichos:.0f} ")
+    print(f" Ecuación: y = {mejor_a}x + {mejor_b} ")
+    print(f" Error del modelo (MAE): {mejor_mae:.2f} estudiantes ")
+    
+    # Calcular precisión porcentual
+    precision = (1 - mejor_mae / np.mean(estudiantes_hist)) * 100
+    print(f" Precisión estimada: {precision:.1f}% ")
+    
+    # Preparar y mostrar gráfica
+    print(f" \n Generando gráfica de regresión lineal... \n ")
+    
+    data_historica = [[años[i], estudiantes_hist[i]] for i in range(len(años))]
+    años_extendidos = list(range(min(años), año_prediccion + 1))
+    regresion_extendida = calcular_regrecion_lineal(años_extendidos, mejor_a, mejor_b)
+    
+    # Generar gráfica con función del plots.py
+    plot_data(data_historica, regresion_extendida, años_extendidos)
+
+    print(f" Análisis completado exitosamente! ")
+
+
+def mostrar_informacion():
+    
+    """
+    Muestra información sobre el programa
+    """
+    
+    print(" \n INFORMACIÓN DEL PROGRAMA: \n ")
+    print("  • Desarrollado para el Lab 7 de Informática I")
+    print("  • Implementa algoritmos de ordenamiento y regresión lineal")
+    print("  • Requiere archivos: notas_estudiantes.csv y hist_matriculados.csv")
+    print("  • Librerías necesarias: numpy, matplotlib")
+    print("  • Genera gráficos automáticamente en opciones 4, 5 y 6")

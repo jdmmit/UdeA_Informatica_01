@@ -66,7 +66,7 @@ def main():
                 print("\n" + "="*65 + "\n")
                 print("ELIMINAR ESTUDIANTE")
                 print("\n" + "="*65 + "\n")        
-                eliminar_estudiantes()
+                eliminar_estudiante()
 
             elif opcion == "3":
                 print("\n" + "="*65 + "\n")
