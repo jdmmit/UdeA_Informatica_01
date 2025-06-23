@@ -54,7 +54,7 @@ def main():
         mostrar_menu()
 
         try:
-            opcion: input("Seleccione una opción (1-7): ").strip()
+            opcion = input("Seleccione una opción (1-7): ").strip()
             
             if opcion == "1":
                 print("\n" + "="*65 + "\n")
@@ -62,7 +62,7 @@ def main():
                 print("\n" + "="*65 + "\n")
                 cargar_datos()
 
-            elif opciones == "2":
+            elif opcion == "2":
                 print("\n" + "="*65 + "\n")
                 print("ELIMINAR ESTUDIANTE")
                 print("\n" + "="*65 + "\n")        
