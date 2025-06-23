@@ -400,8 +400,8 @@ def cargar_datos_historicos():
         # Saltar encabezados y procesar datos
         for i in range(1, len(lineas)):
             linea = lineas[i].strip()
-            if "," in lineas and linea:
-                partes = linea.split(",")
+            if ',' in linea and linea:
+                partes = linea.split(',')
                 if len(partes) >= 2:
                     try:
                         año = int(partes[0].strip())
@@ -410,7 +410,7 @@ def cargar_datos_historicos():
                         estudiantes_hist.append(estudiantes)
                     except ValueError:
                         continue
-                    
+
         return años, estudiantes_hist
     
     except FileNotFoundError:
