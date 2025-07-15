@@ -34,8 +34,8 @@ def plot_data(data, regression_line, years):
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=12)
     plt.title('Datos Históricos y Regresión Lineal - Estudiantes Matriculados', fontsize=14, fontweight='bold')
-    plt.xlabel('Año', fontsize=12)
-    plt.ylabel('Número de Estudiantes', fontsize=12)
+    plt.xlabel('Año', fontsize=14, fontweight='bold')
+    plt.ylabel('Número de Estudiantes', fontsize=14, fontweight='bold')
 
     # Añadir punto de predicción si existe
     if len(years) > len(data):
@@ -57,7 +57,7 @@ def graficar_promedios(indices_promedios):
     global estudiantes
 
     # Preparar datos para el gráfico
-    nombres = [estudiantes[i] for i, _ in indices_promedios]
+    nombres = [estudiantes[i] for i, _ in indices_promedios] 
     promedios = [promedio for _, promedio in indices_promedios]
 
     # Crear el gráfico
@@ -171,6 +171,7 @@ def cargar_datos():
         print(f" Cursos: {len(cursos)}")
         print(f" Estudiantes: {len(estudiantes)}")
         print(f" Matriz de notas: {len(notas_matriz)} filas")
+        
 
         return True
     
